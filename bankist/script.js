@@ -70,7 +70,7 @@ const displayMovements = function (movements) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}</div>
+        <div class="movements__value">$${mov}</div>
       </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -78,6 +78,50 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `$${balance}`;
+};
+
+calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `$${incomes}`;
+
+  const out = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `$${Math.abs(out)}`;
+
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => {
+      console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `$${Math.abs(interest)}`;
+};
+
+calcDisplaySummary(account1.movements);
+
+const createUsernames = function (accs) {
+  accs.forEach(acc => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(letter => letter[0])
+      .join('');
+  });
+};
+
+createUsernames(accounts);
+
+// console.log(accounts);
 /////////// LECTURES /////////////
 // const currencies = new Map([
 //   ['USD', 'United States dollar'],
@@ -224,7 +268,7 @@ displayMovements(account1.movements);
 
 //////////////////////////////////////////////////
 
-const arr = [1, 2, 3, 4, 5];
+// const arr = [1, 2, 3, 4, 5];
 
 // const newArrMulti = arr.map(current => {
 //   return current * 2;
@@ -252,18 +296,27 @@ const arr = [1, 2, 3, 4, 5];
 // console.log(arr);
 
 //////////////////////////////////////////////////
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
-const euroToUSD = 1.1;
+// const euroToUSD = 1.1;
 
-const movementsUSD = movements.map(movement =>
-  Math.trunc(movement * euroToUSD)
-);
+// const movementsUSD = movements.map(movement =>
+//   Math.trunc(movement * euroToUSD)
+// );
 
-console.log(movements);
-console.log(movementsUSD);
+// console.log(movements);
+// console.log(movementsUSD);
 
-movements.map((mov, i, arr) => {});
+// prettier-ignore
+// const movementDescriptions = movements.map((movement, i) => {
+//   return `Movement ${[i]}:
+//     You ${movement > 0 ? 'deposited' : 'withdrew'}
+//       ${Math.abs(movement)}`;
+//   });
+
+// console.log(movementDescriptions);
+
+// console.log(Math.trunc(Math.random() * 6));
 
 // const movementsUSDforOfLoop = [];
 
@@ -273,3 +326,71 @@ movements.map((mov, i, arr) => {});
 // console.log(movementsUSDforOfLoop);
 
 //////////////////////////////////////////////////
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// const deposits = movements.filter(function (mov) {
+//   return mov > 0;
+// });
+
+// const withDraws = movements.filter(mov => mov > 0) ? '+' : '-';
+// const withDraws = movements.filter(mov => mov < 0);
+
+// console.log(deposits);
+// console.log(withDraws);
+
+//////////////////////////////////////////////////
+
+// const balance = movements.reduce((accumulator, current, index, array) => {
+//   console.log(`Iteration ${index}: ${accumulator}`);
+//   return accumulator + current;
+// }, 0);
+
+// console.log(balance);
+
+// const max = movements.reduce((acc, mov) => (acc > mov ? acc : mov));
+// const max = movements.reduce((acc, mov) => {
+//   if (acc > mov) {
+//     return acc;
+//   } else {
+//     return mov;
+//   }
+// });
+
+// console.log(max);
+///////////////////////////////////////
+
+// const ages = [5, 2, 4, 1, 15, 8, 3];
+// const calcAverageHumanAge = function (ages) {
+//   const humanAges = ages.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
+//   const adults = humanAges.filter(adult => adult >= 18);
+//   const averageAge = adults.reduce((a, b) => {
+//     return a + b / adults.length;
+//   }, 0);
+//   return averageAge;
+// };
+
+// const avg1 = calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+// console.log(avg1);
+// const calcAverageHumanAge = ages => {
+//   // console.log(ages);
+//   const total = ages.filter(age => {
+//     // return age <= 2 ? 2 * age : 16 + age * 4;
+//     return age <= 2;
+//   });
+//   return total;
+// };
+
+// console.log(calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]));
+///////////////////////////////////////
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const euroToUSD = 1.1;
+
+const totalDepositsInUSD = movements
+  .filter(mov => mov > 0)
+  .map(mov => mov * euroToUSD)
+  .reduce((a, b) => a + b, 0);
+
+console.log(Math.trunc(totalDepositsInUSD));
+///////////////////////////////////////
