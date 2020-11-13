@@ -23,6 +23,39 @@ body {
   padding: 2rem;
 }
 
+.modal {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  /* position: absolute;
+  top: 100px;
+  left: 35%; */
+  margin: 30px auto 10px;
+  height: 300px;
+  width: 300px;
+  background-color: lightgray;
+  border-radius: 10px;
+}
+
+.bozo {
+  display: none;
+  /* transition: all 1.3s; */
+}
+
+.modal__container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.modal__container h1 {
+  margin: 20px 0;
+}
+
+.modal__container h2 {
+  text-align: center;
+}
+
 nav {
   display: flex;
   justify-content: space-between;

@@ -4,21 +4,21 @@
 
 /////////// DATA /////////////
 const account1 = {
-  owner: 'Jonas Schmedtmann',
+  owner: 'Jona Schmedtmann',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
 };
 
 const account2 = {
-  owner: 'Jessica Davis',
+  owner: 'Jess Davis',
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
 };
 
 const account3 = {
-  owner: 'Steven Williams',
+  owner: 'Stev Williams',
   // owner: 'Steven Thomas Williams',
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
@@ -26,7 +26,7 @@ const account3 = {
 };
 
 const account4 = {
-  owner: 'Sarah Smith',
+  owner: 'Sara Smith',
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
@@ -35,6 +35,9 @@ const account4 = {
 const accounts = [account1, account2, account3, account4];
 
 /////////// ELEMENTS /////////////
+
+const modal = document.querySelector('.modal');
+
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
 const labelBalance = document.querySelector('.balance__value');
@@ -60,10 +63,12 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
 
-  movements.forEach(function (mov, i) {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -129,16 +134,20 @@ const updateUI = function (acc) {
 };
 
 // Event handler
+btnLogin.addEventListener('click', function (e) {
+  modal.classList.add('bozo');
+});
+
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
-  console.log(currentAccount);
+  // console.log(currentAccount);
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
-    console.log(`Logged In Bozo`);
+    // console.log(`Logged In Bozo`);
 
     // Display UI and Message
     labelWelcome.textContent = `Welcome back ${
@@ -215,8 +224,132 @@ btnClose.addEventListener('click', function (e) {
   inputCloseUsername.value = inputClosePin.value = '';
 });
 
+let sorted = false;
+
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
+
 // const bozo100 = [
+// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 // /////////////////////////////////////
+
+// const x = new Array(7);
+// console.log(x);
+
+// x.fill(1, 3, 5);
+// console.log(x);
+
+// const y = Array.from({ length: 7 }, (_, i) => i + 1);
+// console.log(y);
+
+// const oneHundred = Array.from({ length: 100 }, (_, i) => i + 1);
+// console.log(oneHundred);
+// console.log(oneHundred.reverse('').join(' '));
+
+// labelBalance.addEventListener('click', function () {
+//   const movementsUI = Array.from(
+//     document.querySelectorAll('.movements__value')
+//   );
+//   console.log(movementsUI);
+// });
+
+// /////////////////////////////////////
+
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+
+// 1.
+dogs.forEach(dog => (dog.recFood = Math.trunc(dog.weight ** 0.75 * 28)));
+console.log(dogs);
+
+// 2.
+const dogSarah = dogs.find(dog => dog.owners.includes('Sarah'));
+console.log(dogSarah);
+console.log(
+  `Sarah's dog is eating ${
+    dogSarah.curFood > dogSarah.recFood ? 'too much' : 'not enough'
+  }`
+);
+
+// 3.
+const ownersEatTooMuch = dogs
+  .filter(dog => {
+    return dog.curFood > dog.recFood;
+  })
+  .flatMap(dog => {
+    return dog.owners;
+  });
+console.log(ownersEatTooMuch);
+
+const ownersEatTooLittle = dogs
+  .filter(dog => {
+    return dog.curFood < dog.recFood;
+  })
+  .flatMap(dog => {
+    return dog.owners;
+  });
+console.log(ownersEatTooLittle);
+
+// 4.
+console.log(`${ownersEatTooMuch.join(' and ')}'s dogs eat too much`);
+console.log(`${ownersEatTooLittle.join(' and ')}'s dogs eat too little`);
+
+// 5.
+console.log(dogs.some(dog => dog.curFood === dog.recFood));
+
+// 6.
+const checkEatingOkay = dog =>
+  dog.curFood > dog.recFood * 0.9 && dog.curFood < dog.recFood * 1.1;
+
+console.log(dogs.some(checkEatingOkay));
+
+// 7.
+console.log(dogs.filter(checkEatingOkay));
+
+// 8.
+const dogsSorted = dogs.slice().sort((a, b) => {
+  return a.recFood - b.recFood;
+});
+
+console.log(dogsSorted);
+
+// dogs.forEach(dog => {
+//   const bozo = dog.weight ** 0.75 * 28;
+//   console.log(bozo);
+//   const bozo1 = dog.owners.includes('Sarah');
+//   console.log(bozo1);
+// });
+
+// /////////////////////////////////////
+
+// const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+// console.log(owners.sort());
+// console.log(movements);
+
+// const newSort = movements.sort((a, b) => {
+//   if (a > b) {
+//     return 1;
+//   } else if (b > a) {
+//     return -1;
+//   }
+// });
+
+// console.log(newSort);
+
+// /////////////////////////////////////
+
+// const str = 'bozo boy';
+// console.log(str);
+// const newStr = str.split('').reverse().join('');
+// console.log(newStr);
+
 // /////////////////////////////////////
 // const arr = [
 //   [1, 2, 3],
